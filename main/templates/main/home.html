@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %} {% block titre %}Acueil{% endblock %} 
+{% block content %} {% for note in notes %}
+<div class="card mt-2">
+  <div class="card-header"><strong>{{ note.titre }}</strong></div>
+  <div class="card-body d-flex flex-row justify-content-between">
+    <div>
+      <p>{{note.description}}</p>
+    </div>
+    <div>
+      {% if user == note.author or perms.main.delete_note %}
+      <form method="post">
+        {% csrf_token %}
+        <button
+          type="submit"
+          class="btn btn-danger"
+          name="note-id"
+          value="{{note.id}}"
+        >
+          Suprimer
+        </button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  <div class="card-footer text-muted">{{note.created_at}}</div>
+</div>
+{% empty %}
+<p>Pas de notes :(</p>
+{% endfor %} {% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %} {% block title %}Profile{% endblock %} 
+{% block content %} {% for kycInfo in kycInfos %}
+<div class="card mt-2">
+  <div class="card-header"><strong>{{ kycInfo.author }}</strong>, <span>{{ kycInfo.updated_at }}</span></div>
+  <div class="card-body d-flex flex-row justify-content-between">
+    <div>
+      <span class="row">{{ kycInfo.nom }}</span>
+      <span class="row">{{ kycInfo.nomFamille }}</span>
+      <span class="row">{{ kycInfo.sex }}</span>
+      <span class="row">{{ kycInfo.dateNaissance }}</span>
+      <span class="row">{{ kycInfo.lieuNaissance }}</span>
+      <span class="row">{{ kycInfo.dateExpiration }}</span>
+      <span class="row">{{ kycInfo.mkz }}</span>
+      <p>{{kycInfo.description}}</p>
+    </div>
+    <div>
+      {% if user == kycInfo.author or perms.main.delete_kycInfo %}
+      <form method="post">
+        {% csrf_token %}
+        <button
+          type="submit"
+          class="btn btn-danger"
+          name="kycInfo-id"
+          value="{{kycInfo.id}}"
+        >
+          Suprimer
+        </button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  <div class="card-footer text-muted">{{kycInfo.created_at}}</div>
+</div>
+{% empty %}
+<p>Pas des informations :(</p>
+{% endfor %} {% endblock %}
